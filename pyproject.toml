@@ -1,0 +1,19 @@
+[project]
+name = "terraform-module-migration"
+version = "0.1.0"
+description = "Tool for updating the VCS source of HCP Terraform modules in bulk"
+authors = [
+    {name = "Guilherme Santos", email = "gsantos@hashicorp.com"},
+]
+dependencies = []
+requires-python = ">=3.12"
+readme = "README.md"
+license = {text = "MPL"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
