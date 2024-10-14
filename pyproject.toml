@@ -5,10 +5,18 @@ description = "Tool for updating the VCS source of HCP Terraform modules in bulk
 authors = [
     {name = "Guilherme Santos", email = "gsantos@hashicorp.com"},
 ]
-dependencies = []
+dependencies = [
+    "prettytable>=3.11.0",
+    "tqdm>=4.66.5",
+    "terrasnek>=0.1.14",
+    "click>=8.1.7",
+]
 requires-python = ">=3.12"
 readme = "README.md"
 license = {text = "MPL"}
+
+[project.scripts]
+tfc-module-migrate = "terraform_module_migration.cli:cli"
 
 [build-system]
 requires = ["pdm-backend"]
