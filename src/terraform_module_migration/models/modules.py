@@ -74,7 +74,12 @@ class TerraformModule:
     def vcs_repo_branch(self) -> Optional[str]:
         if self.vcs_attrs is None:
             return None
-        return self.vcs_attrs.get("branch", None)
+
+        branch = self.vcs_attrs.get("branch", None)
+        if branch is None or branch == "":
+            return None
+
+        return branch
 
     @property
     def vcs_repo_identifier(self) -> Optional[str]:

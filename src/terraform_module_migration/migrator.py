@@ -25,10 +25,8 @@ class TerraformModuleMigrationPlan:
         "No-Code",
         "Source VCS",
         "Source Repo",
-        "Source Branch",
         "Dest VCS",
         "Dest Repo",
-        "Dest Branch",
     )
 
     def __init__(
@@ -63,10 +61,8 @@ class TerraformModuleMigrationPlan:
                 else None
             ),
             self.source_modules[name].vcs_repo_identifier,
-            self.source_modules[name].vcs_repo_branch,
             self.dest_payloads[name].vcs_repo_source.value,
             self.dest_payloads[name].vcs_repo_identifier,
-            self.dest_payloads[name].vcs_repo_branch,
         )
 
 
@@ -82,6 +78,7 @@ class TerraformModuleMigrator:
         self.source_vcs = source_vcs
         self.dest_vcs = dest_vcs
         self.no_code = False  # No-code modules not yet supported
+        self.branch_based = False  # Branch-based modules not yet supported
 
         if logger is not None:
             self.logger = logger
@@ -142,6 +139,9 @@ class TerraformModuleMigrator:
     def _filter_module(self, module: TerraformModule) -> bool:
         if not self.no_code and module.no_code:
             self.logger.info("'%s' excluded: no-code module", module.name)
+            return False
+        if not self.branch_based and module.vcs_repo_branch is not None:
+            self.logger.info("'%s' excluded: branch-based module", module.name)
             return False
         if module.vcs_source is None:
             self.logger.info("'%s' excluded: not a VCS module", module.name)
