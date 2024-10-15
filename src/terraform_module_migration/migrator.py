@@ -197,7 +197,8 @@ class TerraformModuleMigrator:
                 "Only repository names in the format :org/:repo are supported"
             )
 
-        return f"{self.dest_vcs.namespace}/{module.vcs_repo_identifier.split("/")[1]}"
+        repo_name = module.vcs_repo_identifier.split("/")[1]
+        return f"{self.dest_vcs.namespace}/{repo_name}"
 
     def _migrate_module(self, name: str, payload: TerraformModulePayload) -> None:
         # Delete the existing module
