@@ -8,7 +8,7 @@ def get_logger(name: Optional[str] = None) -> logging.Logger:
     if name is None:
         name = __name__
 
-    logger = logging.getLogger(name)
+    logger = logging.Logger(name)
     if logger.hasHandlers():
         return logger
 
