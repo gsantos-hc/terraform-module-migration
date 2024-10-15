@@ -3,6 +3,23 @@
 A Python script for bulk-updating the Version Control System source of HCP
 Terraform/Terraform Enterprise modules.
 
+## Build
+
+This project relies on [PDM](https://pdm-project.org/latest/) as its package
+manager. To build/install the CLI:
+
+```shell
+# Create a virtual environment, install dependencies, and make CLI available
+# for usage
+$ pdm install
+
+# Activate the virtual environment
+$ $(pdm venv activate)
+
+# Optional: build wheel for installation elsewhere
+$ pdm build
+```
+
 ## Usage
 
 ```shell
