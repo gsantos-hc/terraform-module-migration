@@ -9,6 +9,7 @@ import click
 from prettytable import PrettyTable
 from terrasnek.api import TFC as TerraformClient
 from tqdm import tqdm
+from tqdm.contrib.logging import logging_redirect_tqdm
 
 from . import get_logger
 from .client import get_private_modules
@@ -120,9 +121,10 @@ class TerraformModuleMigrator:
         # Migrate modules. If in interactive mode, print a progress bar.
         if interactive:
             with tqdm(total=len(payloads), unit="modules") as pbar:
-                for name, payload in payloads.items():
-                    self._migrate_module(name, payload)
-                    pbar.update(1)
+                with logging_redirect_tqdm(loggers=[self.logger]):
+                    for name, payload in payloads.items():
+                        self._migrate_module(name, payload)
+                        pbar.update(1)
         else:
             for name, payload in payloads.items():
                 self._migrate_module(name, payload)
@@ -195,7 +197,8 @@ class TerraformModuleMigrator:
                 "Only repository names in the format :org/:repo are supported"
             )
 
-        return f"{self.dest_vcs.namespace}/{module.vcs_repo_identifier.split("/")[1]}"
+        repo_name = module.vcs_repo_identifier.split("/")[1]
+        return f"{self.dest_vcs.namespace}/{repo_name}"
 
     def _migrate_module(self, name: str, payload: TerraformModulePayload) -> None:
         # Delete the existing module
