@@ -44,11 +44,12 @@ def _get_vcs_source(source: str) -> Dict[str, str]:
 )
 @click.option(
     "--plan-file",
-    type=click.Path(exists=False, writable=True),
+    type=click.Path(file_okay=True, dir_okay=False, writable=True, path_type=Path),
+    required=True,
     help="Path to the CSV file to which the migration plan will be saved.",
 )
 def cli(
-    src_namespace: str, dst_namespace: str, src_vcs: str, dst_vcs: str, plan_file: str
+    src_namespace: str, dst_namespace: str, src_vcs: str, dst_vcs: str, plan_file: Path
 ):
     logger = get_logger(__name__)
 
@@ -65,6 +66,10 @@ def cli(
         logger.error(
             "TFC_TOKEN and TFC_ORGANIZATION environment variables must be set."
         )
+        return
+
+    if plan_file.exists():
+        logger.error("Plan file '%s' already exists", plan_file)
         return
 
     # Configure the source and destination VCS objects
@@ -88,4 +93,4 @@ def cli(
 
     # Instantiate the migrator and initiate interactive migration
     migrator = TerraformModuleMigrator(tfc_client, source_vcs, dest_vcs, logger)
-    migrator.migrate(Path(plan_file), interactive=True)
+    migrator.migrate(plan_file, interactive=True)
